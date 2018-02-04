@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become_user: sudo
+  tasks:
+    - name: create downloads directory
+      file: path=/vagrant/downloads state=directory
+    - name: download miniconda
+      get_url:
+        url: https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+        dest: /vagrant/downloads/miniconda.sh
+        mode: 0440
+    - name: install miniconda
+      shell: /vagrant/downloads/miniconda.sh -b -p $HOME/miniconda
+    - name: update path
+      shell: echo 'export PATH=$HOME/miniconda/bin:$PATH' >> ~/.bashrc && . ~/.bashrc
